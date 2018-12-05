@@ -1,4 +1,4 @@
-with open('day1_input.txt') as file:
+with open('input.txt') as file:
     data = file.read()
 
 frequency = 0

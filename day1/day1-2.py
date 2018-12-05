@@ -1,4 +1,4 @@
-with open('day1_input.txt') as file:
+with open('test.txt') as file:
     data = file.read()
 
 frequency_changes = data.splitlines()
