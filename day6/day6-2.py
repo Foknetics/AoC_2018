@@ -1,50 +1,53 @@
 max_distance = 10000
+
 with open('input.txt') as file:
-    data = file.read()
+    data = file.read().splitlines()
 
 def manhattan_distance(point1, point2):
-    x_distance = point2[0] - point1[0]
-    y_distance = point2[1] - point1[1]
-    return abs(x_distance)+abs(y_distance)
+    x1, y1 = point1
+    x2, y2 = point2
+    return abs(x2-x1)+abs(y2-y1)
 
-def total_distance(point, dataset):
+def inside_max(point, dataset):
     total = 0
     for _id in dataset:
         total += manhattan_distance(point, dataset[_id])
-    return total
+        if total >= max_distance:
+            return False
+    return True
 
-points = [(int(coordinate[1]), int(coordinate[0])) for coordinate in [coordinate.split(', ') for coordinate in data.splitlines()]]
-ids = [chr(x+65) for x in range(len(data.splitlines()))]
+points = [(int(coordinate[1]), int(coordinate[0])) for coordinate in [coordinate.split(', ') for coordinate in data]]
+ids = [chr(x+65) for x in range(len(data))]
 
 dataset = {}
-for x in range(len(ids)):
-    dataset[ids[x]] = points[x]
+for _id, point in zip(ids, points):
+    dataset[_id] = point
 
-min_x = points[0][0]
-min_y = points[0][1]
-max_x = min_x
-max_y = min_y
+min_x, min_y = points[0]
+max_x, max_y = points[0]
+
 data_map = {}
 for _id, point in dataset.items():
-    if point[0] > max_x:
-        max_x = point[0]
-    elif point[0] < min_x:
-        min_x = point[0]
-    if point[1] > max_y:
-        max_y = point[1]
-    elif point[1] < min_y:
-        min_y = point[1]
-    data_map[(point[0], point[1])] = _id
+    x, y = point
+    if x > max_x:
+        max_x = x
+    elif x < min_x:
+        min_x = x
+    if y > max_y:
+        max_y = y
+    elif y < min_y:
+        min_y = y
+    data_map[(x, y)] = _id
 
 count = 0
 for x in range(min_x, min_x+max_x):
     for y in range(min_y, min_y+max_y):
-        if total_distance((x,y), dataset) < max_distance:
+        if inside_max((x,y), dataset):
             count += 1
-            if (x, y) not in data_map:
-                data_map[(x, y)] = '#'
-        elif (x, y) not in data_map:
-                data_map[(x, y)] = '.'
+        #    if (x, y) not in data_map:
+        #        data_map[(x, y)] = '#'
+        #elif (x, y) not in data_map:
+        #        data_map[(x, y)] = '.'
 
 #display_map = '  '+''.join([str(y) for y in range(min_y, min_y+max_y)])+'\n'
 #for x in range(min_x, min_x+max_x):
