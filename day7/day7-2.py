@@ -6,19 +6,19 @@ for x in range(1, 5):
 with open('input.txt') as file:
     data = file.read()
 
-steps = []
+steps_left = []
 step_dependencies = []
 for line in data.splitlines():
     splits = line.split()
     step_dependencies.append((splits[1], splits[7]))
-    if splits[1] not in steps:
-        steps.append(splits[1])
-    if splits[7] not in steps:
-        steps.append(splits[7])
-steps_left = steps.copy()
+    if splits[1] not in steps_left:
+        steps_left.append(splits[1])
+    if splits[7] not in steps_left:
+        steps_left.append(splits[7])
 
 in_prog = []
 solution = ''
+solution_length = len(steps_left)
 total_time = -1
 
 def available_jobs(step_dependencies, in_prog):
@@ -26,7 +26,7 @@ def available_jobs(step_dependencies, in_prog):
     step_dependencies = [step for step in steps_left if step not in dependencies]
     return sorted(list(set(step_dependencies).difference(set(in_prog))))
 
-while len(solution) != len(steps):
+while len(solution) != solution_length:
     total_time += 1
     for elf in elves:
         if elf['current'] != None:

@@ -1,20 +1,19 @@
 with open('input.txt') as file:
     data = file.read()
 
-steps = []
+steps_left = []
 step_dependencies = []
 for line in data.splitlines():
     splits = line.split()
     step_dependencies.append((splits[1], splits[7]))
-    if splits[1] not in steps:
-        steps.append(splits[1])
-    if splits[7] not in steps:
-        steps.append(splits[7])
-
-steps_left = steps.copy()
+    if splits[1] not in steps_left:
+        steps_left.append(splits[1])
+    if splits[7] not in steps_left:
+        steps_left.append(splits[7])
 
 solution = ''
-while len(solution) != len(steps):
+solution_length = len(steps_left)
+while len(solution) != solution_length:
     dependencies = [x[1] for x in step_dependencies]
     possible_steps = [step for step in steps_left if step not in dependencies]
     next_step = sorted(possible_steps)[0]
